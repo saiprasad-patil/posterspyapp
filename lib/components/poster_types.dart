@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:posterspyapp/components/type_provider.dart';
+import 'package:provider/provider.dart';
 
 class PosterTypes extends StatelessWidget {
   const PosterTypes({super.key});
@@ -10,31 +12,24 @@ class PosterTypes extends StatelessWidget {
       children: [
         PosterTypeLable(
           typeText: "All",
-          isSelected: true,
         ),
         PosterTypeLable(
           typeText: "Movies",
-          isSelected: false,
         ),
         PosterTypeLable(
           typeText: "Tv shows",
-          isSelected: false,
         ),
         PosterTypeLable(
           typeText: "Video games",
-          isSelected: false,
         ),
         PosterTypeLable(
           typeText: "Comics",
-          isSelected: false,
         ),
         PosterTypeLable(
           typeText: "Music",
-          isSelected: false,
         ),
         PosterTypeLable(
           typeText: "Staff picks",
-          isSelected: false,
         ),
       ],
     );
@@ -43,22 +38,25 @@ class PosterTypes extends StatelessWidget {
 
 class PosterTypeLable extends StatelessWidget {
   final String typeText;
-  final bool isSelected;
+
   const PosterTypeLable({
     super.key,
     required this.typeText,
-    required this.isSelected,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      child: Text(
-        typeText,
-        style: isSelected
-            ? Theme.of(context).textTheme.labelLarge
-            : Theme.of(context).textTheme.labelMedium,
+    return Consumer<TypeProvider>(
+      builder: (context, typeProviderModel, child) => TextButton(
+        onPressed: () {
+          typeProviderModel.toggle(typeText);
+        },
+        child: Text(
+          typeText,
+          style: typeText == typeProviderModel.typeSelected
+              ? Theme.of(context).textTheme.labelLarge
+              : Theme.of(context).textTheme.labelMedium,
+        ),
       ),
     );
   }
