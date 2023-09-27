@@ -50,6 +50,7 @@ class PosterTypeLable extends StatelessWidget {
       builder: (context, typeProviderModel, child) => TextButton(
         onPressed: () {
           typeProviderModel.toggle(typeText);
+          typeProviderModel.setPageUrl(typeText);
         },
         child: Text(
           typeText,

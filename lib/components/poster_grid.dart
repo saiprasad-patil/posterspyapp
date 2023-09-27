@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
+import 'package:posterspyapp/components/type_provider.dart';
+import 'package:provider/provider.dart';
 
 class PosterGrid extends StatefulWidget {
   const PosterGrid({super.key});
@@ -11,15 +13,22 @@ class PosterGrid extends StatefulWidget {
 
 class _PosterGridState extends State<PosterGrid> {
   List<String> allImages = [];
+  List<String> finalres = [];
   final baseurl = 'https://posterspy.com/';
   Future<List<String>> getAllImages() async {
-    final url = Uri.parse('$baseurl/posters/');
+    final provider = Provider.of<TypeProvider>(context, listen: true);
+    final url = Uri.parse('$baseurl${provider.pageurl}');
     final response = await http.get(url);
     dom.Document html = dom.Document.html(response.body);
     allImages = html
         .querySelectorAll('a > img')
         .map((e) => e.attributes['src']!)
         .toList();
+    for (var image in allImages) {
+      if (image.isEmpty) {
+        allImages.remove(image);
+      }
+    }
     return allImages;
   }
 
@@ -47,8 +56,10 @@ class _PosterGridState extends State<PosterGrid> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {},
-                        child: Image.network(allImages[index + 1],
-                            fit: BoxFit.cover),
+                        child: allImages[index + 1] != ""
+                            ? Image.network(allImages[index + 1],
+                                fit: BoxFit.cover)
+                            : null,
                       );
                     }),
               );
