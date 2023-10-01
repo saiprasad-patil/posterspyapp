@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:posterspyapp/components/poster_grid.dart';
 import 'package:posterspyapp/components/poster_types.dart';
+import 'package:posterspyapp/components/type_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,8 +16,34 @@ class HomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
         title: Padding(
           padding: EdgeInsets.only(left: mediaQuery.width * 0.05),
-          child: const Text(
-            "PosterSpy",
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "PosterSpy",
+              ),
+              Row(
+                children: [
+                  Consumer<TypeProvider>(
+                    builder: (context, typeProviderModel, child) => IconButton(
+                      onPressed: () {
+                        typeProviderModel.reload();
+                      },
+                      icon: const Icon(
+                        Icons.replay,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.info,
+                        color: Colors.white,
+                      )),
+                ],
+              )
+            ],
           ),
         ),
       ),

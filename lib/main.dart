@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
             primaryColor: const Color.fromARGB(255, 32, 34, 37),
             canvasColor: const Color.fromARGB(255, 20, 21, 23),
+            buttonTheme: const ButtonThemeData(
+                buttonColor: Color.fromARGB(255, 0, 102, 255)),
             textTheme: TextTheme(
                 labelMedium: GoogleFonts.inter(
                     fontSize: 15,

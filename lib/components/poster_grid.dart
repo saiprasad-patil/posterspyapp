@@ -13,8 +13,9 @@ class PosterGrid extends StatefulWidget {
 
 class _PosterGridState extends State<PosterGrid> {
   List<String> allImages = [];
-  List<String> finalres = [];
+  List<String> allText = [];
   final baseurl = 'https://posterspy.com/';
+
   Future<List<String>> getAllImages() async {
     final provider = Provider.of<TypeProvider>(context, listen: true);
     final url = Uri.parse('$baseurl${provider.pageurl}');
@@ -32,8 +33,27 @@ class _PosterGridState extends State<PosterGrid> {
     return allImages;
   }
 
+  Future<List<String>> getText() async {
+    final provider = Provider.of<TypeProvider>(context, listen: true);
+    final url = Uri.parse('$baseurl${provider.pageurl}');
+    final response = await http.get(url);
+    dom.Document html = dom.Document.html(response.body);
+    allText = html
+        .querySelectorAll('a > img')
+        .map((e) => e.attributes['alt']!)
+        .toList();
+    for (var text in allText) {
+      if (text.isEmpty) {
+        allText.remove(text);
+      }
+      provider.allText.add(text);
+    }
+    return allText;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.sizeOf(context);
     return Expanded(
       child: FutureBuilder(
           future: getAllImages(),
@@ -55,7 +75,45 @@ class _PosterGridState extends State<PosterGrid> {
                     ),
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          showModalBottomSheet(
+                              backgroundColor: Theme.of(context)
+                                  .canvasColor
+                                  .withOpacity(0.7),
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SizedBox(
+                                  height: mediaQuery.height * 1 / 4,
+                                  width: double.infinity,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.all(mediaQuery.height / 50),
+                                    child: Center(
+                                      child: FutureBuilder(
+                                          future: getText(),
+                                          builder: (context, snaphot) {
+                                            if (snaphot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            } else {
+                                              return Container(
+                                                child: Text(
+                                                  allText[index + 1],
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge,
+                                                ),
+                                              );
+                                            }
+                                          }),
+                                    ),
+                                  ),
+                                );
+                              });
+                        },
                         child: allImages[index + 1] != ""
                             ? Image.network(allImages[index + 1],
                                 fit: BoxFit.cover)

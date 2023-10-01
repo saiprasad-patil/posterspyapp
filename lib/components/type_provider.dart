@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class TypeProvider extends ChangeNotifier {
   String typeSelected = "All";
   String pageurl = 'posters/';
+  List<String> allText = [];
   void toggle(String typeText) {
     typeSelected = typeText;
     notifyListeners();
@@ -35,6 +36,10 @@ class TypeProvider extends ChangeNotifier {
         pageurl = 'posters/';
         break;
     }
+    notifyListeners();
+  }
+
+  void reload() {
     notifyListeners();
   }
 }
