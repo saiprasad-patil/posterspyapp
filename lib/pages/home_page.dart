@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:posterspyapp/components/poster_grid.dart';
 import 'package:posterspyapp/components/poster_types.dart';
 import 'package:posterspyapp/components/type_provider.dart';
+import 'package:posterspyapp/pages/info_page.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -36,7 +37,12 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => InfoPage()));
+                      },
                       icon: const Icon(
                         Icons.info,
                         color: Colors.white,
