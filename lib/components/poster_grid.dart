@@ -99,13 +99,11 @@ class _PosterGridState extends State<PosterGrid> {
                                                     CircularProgressIndicator(),
                                               );
                                             } else {
-                                              return Container(
-                                                child: Text(
-                                                  allText[index + 1],
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleLarge,
-                                                ),
+                                              return Text(
+                                                allText[index + 1],
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge,
                                               );
                                             }
                                           }),
